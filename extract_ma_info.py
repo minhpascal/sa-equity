@@ -7,6 +7,8 @@ Created on Wed Jun  1 08:24:35 2016
 
 #pull M&A/writedown data
 
+
+
 import bs4
 import requests
 import yaml
@@ -104,4 +106,8 @@ def grabNewsBlocks(html):   #pulls the bullet blocks from a page
     bullet_header = "mc_list_texting right bullets"
     b = bs4.BeautifulSoup(html,'lxml')
     return b.findAll("div", {"class":bullet_header})
+    
+
+    
+
     

@@ -4,8 +4,15 @@ Created on Wed Jun  1 08:24:35 2016
 
 @author: VineetA
 """
-
+import openpyxl
 import extract_ma_info
+import filter_bullets
+import string 
+import xlsxwriter
+import glob
+import csv
+import os
+
 
 class TickerInfo(object):
     def __init__(self,ticker): #single ticker
@@ -15,6 +22,9 @@ class TickerInfo(object):
     @classmethod
     def get_attr_at_date(self, datekey_ht, **date):
         '''
+        generic class method to extract values from a dictionary with key that 
+        equals some datetime.date object
+        
         year/day/month values of date most be ints
         '''
         res = list()
@@ -30,28 +40,43 @@ class TickerInfo(object):
             if (is_year and is_month and is_day):
                 res.append(value)
         return res
+    
+    def write_to_excel_at_year(self, ws, year, info_ht):
+        '''
+        info_ht defaults to self.ma
+        '''
+        def flatten(L, res = None):
+            if type(L)!=list:
+                return L
+            if res==None:
+                res =[]
+            for i in L:
+                if (type(i)!=list):
+                    res+=[i]
+                else:
+                    flatten(i,res)
+            return res
+        ticker_row = -1
+        present_col = -1
+        for r in range(1,len(ws.active.rows)+1):
+            if (ws.active.cell(row=r,column=1).value == self.ticker):
+               ticker_row = r
+        for c in range(1,len(ws.active.columns)+1):
+            if (ws.active.cell(row=1,column=c).value == year):
+                present_col=c
+        
+        if (present_col==-1): 
+            raise Exception("year not found")
+        if (ticker_row==-1): 
+            raise Exception("Ticker not found")
+        L = TickerInfo.get_attr_at_date(info_ht, **{'year':year})
+        L = '\n\n'.join(filter_bullets.focus(L))
+        if (L==[]):
+            L = ''
+        ws.active.cell(row=ticker_row, column=present_col).value = L
+        
 
-     
 
-if __name__=='__main__':
-    tickers = ['XOM']
-    
-    ''',
-                 'CHK',
-                 'SWN',
-                 'APC',
-                 'COG',
-                 'BP',
-                 'COP',
-                 'EQT',
-                 'CVX',
-                 'AR',
-                 'BHP',
-                 'RRC',
-                 'EOG',
-                 'DVN']'''
-    
-    tk = list()
-    for ticker in tickers:
-        tk.append(TickerInfo(ticker))
-    
+ 
+
+
