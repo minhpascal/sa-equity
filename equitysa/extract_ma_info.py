@@ -32,7 +32,7 @@ def is404(html):
     
 def loginSA():
 	#we get data from keys
-    filepath = "keys.yaml"   
+    filepath = "resources/keys.yaml"   
     with open(filepath, 'r') as f:
         keys = yaml.load(f)
     	#print(keys['username'])

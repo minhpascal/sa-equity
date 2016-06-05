@@ -76,7 +76,7 @@ def target_freq(s,scoring_dict):
     '''
     scores string based on target inclusion
     '''
-    with open("target_keywords.txt") as f:
+    with open("resources/target_keywords.txt") as f:
         target_str = f.read()
     targets = [word.strip() for word in target_str.split(',')]
     l = s.split()

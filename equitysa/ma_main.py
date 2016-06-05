@@ -3,7 +3,7 @@ import tickerinfo_class as tick
 import openpyxl
 
 def tickerMA_main():
-    with open("tickers.txt") as f:
+    with open("resources/tickers.txt") as f:
         target_str = f.read()
     tickers = [word.strip() for word in target_str.split(',')]
  
