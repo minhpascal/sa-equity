@@ -1,1 +1,4 @@
 sa-equity
+
+###License
+MIT
