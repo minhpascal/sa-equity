@@ -1,7 +1,7 @@
 Scrape SeekingAlpha pages for M&A, earnings, and news. 
 ###Installation
 1. For now, `git clone https://github.com/vapte/sa-equity.git` will have to do. Plans to register on PyPI in the future.
-2. Fill in resources/keys.yaml 
+2. Fill in `resources/keys.yaml `
 3. `import equitysa`
 
 ###Usage
