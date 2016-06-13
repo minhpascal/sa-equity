@@ -1,24 +1,32 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jun  1 08:24:35 2016
-
-@author: VineetA
-"""
 import openpyxl
-import extract_ma_info
+import get_ticker_info 
 import filter_bullets
 import string 
-import xlsxwriter
 import glob
 import csv
 import os
 
 
 class TickerInfo(object):
-    def __init__(self,ticker): #single ticker
-        self.ticker = ticker
-        self.ma = extract_ma_info.getMAinfo(ticker)
-        
+    def __init__(self,tag,ticker): #single ticker
+        self.ticker = ticker.upper()
+        self._tag = tag
+        Scraper = get_ticker_info.GetTickerInfo(self.tag,self.ticker)
+        self.ma = Scraper() 
+
+    @property 
+    def tag(self):
+        idioms=  {'news':'/news/on-the-move/',
+                  'ma':'/news/m-a/',
+                  'dividends': '/news/dividends/',
+                  'earnings': '/news/earnings_news/',
+                  'general': '/news/',
+                  }
+        if idioms.get(self._tag,None) is not None:
+            return idioms[self._tag]
+        else:
+            return self._tag
+
     @classmethod
     def get_attr_at_date(self, datekey_ht, **date):
         '''

@@ -1,0 +1,1 @@
+openpyxl, bs4, yaml 
