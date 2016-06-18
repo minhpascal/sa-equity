@@ -5,38 +5,23 @@ import string
 import glob
 import csv
 import os
+import collections
 
 
 class TickerInfo(object):
     def __init__(self,tag,ticker): #single ticker
         self.ticker = ticker.upper()
-        self._tag = tag
+        self.tag = tag
         Scraper = get_ticker_info.GetTickerInfo(self.tag,self.ticker)
-        self.ma = Scraper() 
+        self.text = Scraper() 
 
-    @property 
-    def tag(self):
-        idioms=  {'news':'/news/on-the-move/',
-                  'ma':'/news/m-a/',
-                  'dividends': '/news/dividends/',
-                  'earnings': '/news/earnings_news/',
-                  'general': '/news/',
-                  }
-        if idioms.get(self._tag,None) is not None:
-            return idioms[self._tag]
-        else:
-            return self._tag
-
-    @classmethod
-    def get_attr_at_date(self, datekey_ht, **date):
-        '''
-        generic class method to extract values from a dictionary 
-        with datetime.date objects as keys
         
+    def get_attr_at_date(self, **date):
+        '''
         year/day/month values of date most be ints
         '''
         res = list()
-        for key,value in datekey_ht.items():
+        for key,value in self.text.items():
             #Python shortcircuits boolean exprs; no KeyError
             is_day,is_month,is_year = [True]*3
             if 'year' in date.keys():
@@ -48,41 +33,33 @@ class TickerInfo(object):
             if (is_year and is_month and is_day):
                 res.append(value)
         return res
+
+    @property
+    def summarized(self):
+        return {key : filter_bullets.focus(self.text[key]) for key in self.text}
+
+    def search(self,term,interval=None):
+        '''
+        assumes interval is tuple of datetime.date objects
+        '''
+        result = collections.defaultdict(collections.deque())
+        for date,frame in self.texts.items():
+            for bullet in frame:
+                if term in bullet:
+                    result[date].append(term)
+        if interval is not None:
+            start,end=interval
+            return {key: result[key] for key in result if (key>start and key<end)}
+        else:
+            return result
+
     
-    def write_to_excel_at_year(self, ws, year, info_ht):
-        '''
-        info_ht defaults to self.ma
-        '''
-        def flatten(L, res = None):
-            if type(L)!=list:
-                return L
-            if res==None:
-                res =[]
-            for i in L:
-                if (type(i)!=list):
-                    res+=[i]
-                else:
-                    flatten(i,res)
-            return res
-        ticker_row = -1
-        present_col = -1
-        for r in range(1,len(ws.active.rows)+1):
-            if (ws.active.cell(row=r,column=1).value == self.ticker):
-               ticker_row = r
-        for c in range(1,len(ws.active.columns)+1):
-            if (ws.active.cell(row=1,column=c).value == year):
-                present_col=c
-        
-        if (present_col==-1): 
-            raise Exception("year not found")
-        if (ticker_row==-1): 
-            raise Exception("Ticker not found")
-        L = TickerInfo.get_attr_at_date(info_ht, **{'year':year})
-        L = '\n\n'.join(filter_bullets.focus(L))
-        if (L==[]):
-            L = ''
-        ws.active.cell(row=ticker_row, column=present_col).value = L
-        
+ 
+
+
+
+
+
 
 
  
