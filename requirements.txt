@@ -1,1 +1,4 @@
-openpyxl, bs4, yaml 
+openpyxl
+bs4
+yaml 
+pandas
