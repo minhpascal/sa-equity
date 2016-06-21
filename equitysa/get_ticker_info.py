@@ -28,10 +28,23 @@ class GetTickerInfo(object):
                 break
         print(page-1,"pages parsed for", self.ticker)
         return block_ht    
-        
 
     
 
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     

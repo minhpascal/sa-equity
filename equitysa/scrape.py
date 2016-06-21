@@ -5,6 +5,7 @@ import requests
 import yaml
 import re
 import calendar 
+from datetime import timedelta
 from datetime import date
 
 request_header= {"Referer": "http://seekingalpha.com/",
@@ -59,6 +60,10 @@ def get_date(block):
     d_raw = block.findAll("span", {'class': 'date pad_on_summaries'})
     d_str = removeInTag(str(d_raw[0]))
     d_list = [x.strip(',.') for x in d_str.split(' ')]
+    if ('Today' in d_str):
+        return date.today()
+    if ('Yesterday' in d_str):
+        return date.today() - timedelta(days=1)
     isCurrYear = False
     if (not len(list(filter(lambda x:len(x)==4 and x.isnumeric(), d_list)))==1):
         isCurrYear = True

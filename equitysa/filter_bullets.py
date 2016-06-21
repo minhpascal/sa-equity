@@ -1,7 +1,7 @@
 import re
 import collections as co
 
-
+"""
 def focus(bullets):
     '''
     assume that bullets is a 2d list where each list contains from an
@@ -9,7 +9,8 @@ def focus(bullets):
     '''
     
     return [filter_event_frame(frame) for frame in bullets]
-    
+"""
+
 def filter_event_frame(bulletSet):   
     '''
     each event frame is distinct, so we choose >=1 bullet from each
@@ -35,7 +36,6 @@ def get_best_bullet(scoring_dict):
             
         if (score>maxScore):
             bestSentence= key
-    #print(bestSentence)
     return bestSentence
                 
 

@@ -36,8 +36,8 @@ class TickerInfo(object):
 
     @property
     def summarized(self):
-        return {key : filter_bullets.focus(self.text[key]) for key in self.text}
-
+        return {key : filter_bullets.filter_event_frame(self.text[key]) for key in self.text}
+        #self.text[key] is a list of strings
     def search(self,term,interval=None):
         '''
         assumes interval is tuple of datetime.date objects
@@ -53,7 +53,7 @@ class TickerInfo(object):
         else:
             return result
 
-    
+
  
 
 
